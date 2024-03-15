@@ -1,5 +1,7 @@
 import  Express  from "express";
 import { Usuarios } from "./routes/routeUsuarios.js";
+import { publicacion } from "./routes/routePublicacion.js";
+
 const app = Express();
 import cors from 'cors';
 
@@ -15,6 +17,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 // Rutas
 app.use('/api/usuarios', Usuarios);
+app.use('/api/publicacion', publicacion);
 
 //Puerto
 app.listen(4000, ()=>{
