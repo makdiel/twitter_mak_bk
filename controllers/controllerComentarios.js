@@ -1,13 +1,12 @@
 import { db } from "../db/conn.js";
-
-const putPublicacion = async (req, res) => {
+const putComentario = async (req, res) => {
     try {
         const { id } = req.params;
-        const { caption } = req.body;
-        const params = [caption, id];
+        const { comentario } = req.body;
+        const params = [comentario, id];
 
-        const sql = ` update tbl_publicacion 
-                    set publicacion = $1
+        const sql = ` update tbl_comentarios 
+                    set comentario = $1
                     where id = $2 returning id, 'Actualizacion Exitosa' mensaje `;
 
         const result = await db.query(sql, params);
@@ -19,20 +18,19 @@ const putPublicacion = async (req, res) => {
     }
 }
 
-const postPublicacion = async (req, res) => {
+const postComentario = async (req, res) => {
     try {
         const {
-            id,
-            publicacion,
+            comentario,
             nombre_usuario
         } = req.body;
 
-        const params = [id,publicacion, nombre_usuario];
+        const params = [comentario, nombre_usuario];
 
-        const sql = ` insert into tbl_publicacion 
-                        (id, publicacion, nombre_usuario  )
+        const sql = ` insert into tbl_comentarios 
+                        ( comentario, nombre_usuario  )
                         values 
-                        ($1, $2,$3)
+                        ($1, $2)
                       returning  id, nombre_usuario, 'Insercion Exitosa' mensaje `;
 
         const result = await (db.query(sql, params));
@@ -42,14 +40,14 @@ const postPublicacion = async (req, res) => {
     }
 }
 
-const deletePublicacion = async (req, res) => {
+const deleteComentario = async (req, res) => {
     try {
         const params = [req.params.id];
 
-        const sql = `update tbl_publicacion 
+        const sql = `update tbl_comentarios 
                     set activo = false 
                 where id = $1 
-                returning id, 'Publicación Borrada' mensaje `;
+                returning id, 'Comentario Borrado' mensaje `;
 
         const result = await db.query(sql, params);
         res.json(result);
@@ -58,7 +56,7 @@ const deletePublicacion = async (req, res) => {
     }
 }
 
-const getPublicaciones = async (req, res) => {
+const getComentario = async (req, res) => {
     try {
 
         const sql = `select a.id,a.publicacion,
@@ -66,12 +64,10 @@ const getPublicaciones = async (req, res) => {
                             a.fecha_post ,
                             a.activo,
                             b.comentario,
-                            b.nombre_usuario "user" ,
-                            b.fecha_post "post_com",
-                            b.id "id_c"
+                            b.nombre_usuario "user" 
                     from tbl_publicacion a 
                     left join tbl_comentarios b on b.publicacion_id = a.id                                             
-                    where a.activo = true and b.activo = true
+                    where a.activo = true
                     order by a.fecha_post desc`
 
         const result = await db.query(sql);
@@ -85,8 +81,8 @@ const getPublicaciones = async (req, res) => {
     }
 }
 export {
-    postPublicacion,
-    getPublicaciones,
-    deletePublicacion,
-    putPublicacion
+    postComentario,
+    getComentario,
+    deleteComentario,
+    putComentario
 }
