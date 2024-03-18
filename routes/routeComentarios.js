@@ -7,9 +7,12 @@ const upload = multer( {storage : storage} );
 import {  postComentario,
     getComentario,
     deleteComentario,
-    putComentario } from "../controllers/controllerComentarios.js";
+    putComentario,postComentar } from "../controllers/controllerComentarios.js";
 
-comentario.post ('', postComentario )
+comentario.post ('/', postComentario )
+
+comentario.post ('/:publicacion_id', postComentar )
+
 
 comentario.get ('' , getComentario);
 

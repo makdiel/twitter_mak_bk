@@ -21,24 +21,55 @@ const putComentario = async (req, res) => {
 const postComentario = async (req, res) => {
     try {
         const {
-            comentario,
-            nombre_usuario
+            id,
+            comentario,            
+            nombre_usuario,
+            publicacion_id
         } = req.body;
 
-        const params = [comentario, nombre_usuario];
-
+        const params = [id,comentario, nombre_usuario,publicacion_id];
+       
         const sql = ` insert into tbl_comentarios 
-                        ( comentario, nombre_usuario  )
+                        (id,comentario,nombre_usuario,publicacion_id)
                         values 
-                        ($1, $2)
+                        ($1, $2, $3, $4)
                       returning  id, nombre_usuario, 'Insercion Exitosa' mensaje `;
-
+     
+        
         const result = await (db.query(sql, params));
         res.json(result)
     } catch (err) {
         res.status(500).json({ mensaje: err.message });
     }
 }
+
+const postComentar = async (req, res) => {
+    try {
+        const {
+            id,
+            comentario,            
+            nombre_usuario
+        } = req.body;
+
+        const { publicacion_id } = req.params;
+        
+        const params = [id,comentario, nombre_usuario,publicacion_id];
+
+        const sql = ` insert into tbl_comentarios 
+                        (id,comentario,nombre_usuario,publicacion_id)
+                        values 
+                        ($1, $2, $3, $4)
+                      returning  id, nombre_usuario, 'Insercion Exitosa' mensaje `;
+
+     
+        
+        const result = await (db.query(sql, params));
+        res.json(result)
+    } catch (err) {
+        res.status(500).json({ mensaje: err.message });
+    }
+}
+
 
 const deleteComentario = async (req, res) => {
     try {
@@ -83,5 +114,6 @@ export {
     postComentario,
     getComentario,
     deleteComentario,
-    putComentario
+    putComentario,
+    postComentar
 }
