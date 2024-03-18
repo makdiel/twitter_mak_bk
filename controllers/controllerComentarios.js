@@ -44,8 +44,7 @@ const deleteComentario = async (req, res) => {
     try {
         const params = [req.params.id];
 
-        const sql = `update tbl_comentarios 
-                    set activo = false 
+        const sql = `delete from tbl_comentarios                      
                 where id = $1 
                 returning id, 'Comentario Borrado' mensaje `;
 

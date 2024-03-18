@@ -65,13 +65,13 @@ const getPublicaciones = async (req, res) => {
                             a.nombre_usuario,
                             a.fecha_post ,
                             a.activo,
-                            b.comentario,
-                            b.nombre_usuario "user" ,
-                            b.fecha_post "post_com",
-                            b.id "id_c"
+                            case when b.comentario isnull then  'sin comentario'  else b.comentario end,
+                            case when b.nombre_usuario isnull then 'mtabora' else b.nombre_usuario end "user" ,
+                            case when b.fecha_post isnull then current_timestamp else b.fecha_post end "post_com",
+                            case when b.id isnull then '1' else b.id end "id_c"
                     from tbl_publicacion a 
                     left join tbl_comentarios b on b.publicacion_id = a.id                                             
-                    where a.activo = true and b.activo = true
+                    where a.activo = true 
                     order by a.fecha_post desc`
 
         const result = await db.query(sql);
